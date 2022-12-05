@@ -1,6 +1,5 @@
 import random
 import re
-import traceback
 
 # nombre x de personne
 try:
@@ -15,10 +14,10 @@ while type(nbr_personne) != int or nbr_personne < 2:
 		print('You must enter a number')
 
 ## définir le nom de toute les personnes
-dictPerson = {0: 'enzo', 1: 'raphael', 2: 'sam', 3: 'rossella'}
-dictEmail = {0: 'enzo.chaboisseau@gmail.com', 1: 'raphael.chaboisseau@gmail.com', 2:'sam@chaboisseau.net', 3:'none'}
-allName = ['enzo','raphael','sam', 'rossella']
-contrainteDict = {'enzo': ['raphael'], 'raphael': ['enzo', 'sam'], 'sam': ['rossella'], 'rossella': ['sam']}
+dictPerson = {}
+dictEmail = {}
+allName = []
+contrainteDict = {}
 
 for i in range(nbr_personne):
 	name = input(f"Rentrez le nom n°{i+1}: ")
@@ -54,32 +53,38 @@ for i in range(nbr_personne):
 	contrainteDict.update({dictPerson[i][0]:nameContrainte})
 
 
+# dictPerson = {0: 'jean', 1: 'marc', 2: 'jim', 3: 'alex'}
+# dictEmail = {0: '****', 1: '*****', 2:'****', 3:'******'}
+# allName = ['jean','marc','jim', 'alex']
+# contrainteDict = {'jean': ['marc'], 'marc': ['enzo', 'jim'], 'jim': ['alex'], 'alex': ['jim']}
+
+
 ## relier les personnes entre elles pour connaitre son SantaClaus
-def ChooseSantaClaus(fDictPerson:dict,fAllName:list,fContrainteDict:dict):
+def ChooseSantaClaus(selfDictPerson:dict,selfAllName:list,selfContrainteDict:dict):
 	global dictPerson
 	global allName
 	global contrainteDict
 	kdo = {}
-	global_availableName = list(fDictPerson.keys())
-	for i in fAllName:
+	global_availableName = list(selfDictPerson.keys())
+	for i in selfAllName:
 		selfAvailableName = global_availableName.copy()
 		for x in selfAvailableName:
-			if fDictPerson[x] == i:
+			if selfDictPerson[x] == i:
 				selfAvailableName.remove(x)
-		for y in fContrainteDict[i]:
-			value = list(fDictPerson.values())
+		for y in selfContrainteDict[i]:
+			value = list(selfDictPerson.values())
 			indexPersonContraint = ''
 			try:
 				indexPersonContraint = value.index(y)
 				selfAvailableName.remove(indexPersonContraint)
 			except ValueError as e:
-				print(f"{selfAvailableName}.remove({indexPersonContraint})")
+				a=1 ##pour faire rien (je sais pas si le pass ou break fonctionne à la place)
 		if len(selfAvailableName) == 0:
 			ChooseSantaClaus(dictPerson, allName, contrainteDict)
 		else:
 			toName = random.choice(selfAvailableName)
 			global_availableName.remove(toName)
-			kdo.update({i:fDictPerson[toName]})
+			kdo.update({i:selfDictPerson[toName]})
 	return kdo
 
 
