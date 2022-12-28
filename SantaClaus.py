@@ -1,56 +1,75 @@
 import random
 import re
 import os 
+from name import prenom
 
-
-# nombre x de personne
-try:
-	nbr_personne = int(input("Choisir le nombre de personne : "))
-except:
-	print('You must enter a number')
-	nbr_personne = "1"
-while type(nbr_personne) != int or nbr_personne < 2:
+choix = int(input("Vous préférez :\n\t1 - Version anonymes\n\t2 - Versions avec vos propres nom, e-mail, contraintes ...etc\n"))
+if choix == 1:
+	nbr_personne = int(input("Combien de personnes participent ?\n"))
+	dictPerson = {}
+	dictEmail = {}
+	allName = []
+	contrainteDict = {}
+	for i in range(nbr_personne):
+		random_number = random.randint(1,len(prenom))
+		dictPerson.update({i:prenom[random_number]})
+		dictEmail.update({prenom[random_number]:f"{prenom[random_number]}@gmail.com"})
+		allName.append(prenom[random_number])
+		icontrainte = []
+		rangefor = random.randint(0,nbr_personne-1)
+		for x in range(rangefor):
+			random_number2 = random.randint(1,len(prenom))
+			while random_number2 == random_number:
+				random_number2 = random.randint(1,len(prenom))
+			icontrainte.append(prenom[random_number2])
+		contrainteDict.update({prenom[random_number]:icontrainte})
+else:
+	#nombre x de personne
 	try:
 		nbr_personne = int(input("Choisir le nombre de personne : "))
-	except: 
+	except:
 		print('You must enter a number')
+		nbr_personne = "1"
+	while type(nbr_personne) != int or nbr_personne < 2:
+		try:
+			nbr_personne = int(input("Choisir le nombre de personne : "))
+		except: 
+			print('You must enter a number')
 
-## définir le nom de toute les personnes
-dictPerson = {}
-dictEmail = {}
-allName = []
-contrainteDict = {}
-nbrtry = 0 
+	## définir le nom de toute les personnes
+	dictPerson = {}
+	dictEmail = {}
+	allName = []
+	contrainteDict = {}
 
-for i in range(nbr_personne):
-	name = input(f"Rentrez le nom n°{i+1}: ")
-	while name in allName or name == "":
+	for i in range(nbr_personne):
 		name = input(f"Rentrez le nom n°{i+1}: ")
-	email = input(f"Rentrez l'adresse E-mail de {name}: ")
-	email_pattern = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
-	while True:
-		if email_pattern.match(email):
-			break
-		elif email == "no" or email == "":
-			email = name + "@gmail.com" 
-			break
-		else:
-			email = input(f"Rentrez l'adresse E-mail de {name}: ")
-	dictPerson.update({i:name})
-	dictEmail.update({name:email})
-	allName.append(name)
+		while name in allName or name == "":
+			name = input(f"Rentrez le nom n°{i+1}: ")
+		email = input(f"Rentrez l'adresse E-mail de {name}: ")
+		email_pattern = re.compile(r'([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+')
+		while True:
+			if email_pattern.match(email):
+				break
+			elif email == "no" or email == "":
+				email = name + "@gmail.com" 
+				break
+			else:
+				email = input(f"Rentrez l'adresse E-mail de {name}: ")
+		dictPerson.update({i:name})
+		dictEmail.update({name:email})
+		allName.append(name)
 
 
-## définir les contraintes qu'aura cette personne
-for i in range(nbr_personne):
-	nameContrainte = input(f"Enter a list (separate with ',') that {dictPerson[i]} won't be abble to send: ").replace(' ','').split(",")
-	for y in nameContrainte:
-		if y not in allName and y != "":
-			nameContrainte = input(f"{y} is not in {allName}, please Enter again: ").replace(' ','').split(",")
-	while dictPerson[i] in nameContrainte or len(nameContrainte) == nbr_personne-1 :
+	## définir les contraintes qu'aura cette personne
+	for i in range(nbr_personne):
 		nameContrainte = input(f"Enter a list (separate with ',') that {dictPerson[i]} won't be abble to send: ").replace(' ','').split(",")
-	contrainteDict.update({dictPerson[i]:nameContrainte})
-
+		for y in nameContrainte:
+			if y not in allName and y != "":
+				nameContrainte = input(f"{y} is not in {allName}, please Enter again: ").replace(' ','').split(",")
+		while dictPerson[i] in nameContrainte or len(nameContrainte) == nbr_personne-1 :
+			nameContrainte = input(f"Enter a list (separate with ',') that {dictPerson[i]} won't be abble to send: ").replace(' ','').split(",")
+		contrainteDict.update({dictPerson[i]:nameContrainte})
 
 
 ## relier les personnes entre elles pour connaitre son SantaClaus
@@ -103,24 +122,7 @@ def ChooseSantaClaus(selfDictPerson:dict,selfAllName:list,selfContrainteDict:dic
 	return kdo
 
 
-kdo = ChooseSantaClaus(dictPerson, allName, contrainteDict,nbrtry)
+kdo = ChooseSantaClaus(dictPerson, allName, contrainteDict,0)
 for i in allName:
 	templateMail = f"Bonjour {i} 👋\n\tVoici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à {kdo[i]}"
 	print(dictEmail[i],templateMail)
-
-
-
-
-
-
-
-
-
-
-
-
-# Pour les test : 
-# dictPerson = {0:'Olivia',1:'Noah', 2:'Alice', 3:'Léa', 4:'Thomas', 5:'Mia', 6:'Jacob', 7:'Charlie', 8:'Nathan', 9:'Florence', 10:'Léo', 11:'Charlotte'}
-# dictEmail = {0:'Olivia@gmail.com',1:'Noah@gmail.com', 2:'Alice@gmail.com', 3:'Léa@gmail.com', 4:'Thomas@gmail.com', 5:'Mia@gmail.com', 6:'Jacob@gmail.com', 7:'Charlie@gmail.com', 8:'Nathan@gmail.com', 9:'Florence@gmail.com', 10:'Léo@gmail.com', 11:'Charlotte@gmail.com'}
-# allName = ['Olivia','Noah','Alice','Léa','Thomas','Mia','Jacob','Charlie','Nathan','Florence','Léo','Charlotte']
-# contrainteDict = {'Olivia':['Olivia'],'Noah':['Noah'], 'Alice':['Alice'], 'Léa':['Léa'], 'Thomas':['Thomas'], 'Mia':['Mia'], 'Jacob':['Jacob'], 'Charlie':['Charlie'], 'Nathan':['Nathan'], 'Florence':['Florence'], 'Léo':['Léo'], 'Charlotte':['Charlotte']}
