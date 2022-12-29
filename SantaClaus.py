@@ -50,14 +50,16 @@ def ChooseSantaClaus(selfDictPerson:dict,selfAllName:list,selfContrainteDict:dic
 				contrainteDict.update({i:nameContrainte})
 				ChooseSantaClaus(dictPerson, allName, contrainteDict,0)
 			elif choix_version == False:
-				for o in range(len(allName)):
-					rangefor = random.randint(0,len(allName)%2)
-					for k in range(rangefor):
+				for p in range(nbr_personne):
+					endrangefor = int(len(allName)**0.5)
+					rangefor = random.randint(0,endrangefor)
+					icontrainte = []
+					for l in range(rangefor):
 						random_number2 = random.randint(0,len(allName)-1)
 						while random_number2 == random_number:
 							random_number2 = random.randint(0,len(allName)-1)
 						icontrainte.append(allName[random_number2])
-					contrainteDict.update({allName[o]:icontrainte})
+					contrainteDict.update({allName[p]:icontrainte})
 				ChooseSantaClaus(dictPerson, allName, contrainteDict, 0)
 	if len(kdo) != len(allName):
 		for i in allName:
@@ -81,7 +83,6 @@ if choix == 1:
 	for j in range(nbr_personne):
 		endrangefor = int(len(allName)**0.5)
 		rangefor = random.randint(0,endrangefor)
-		print(rangefor)
 		icontrainte = []
 		for x in range(rangefor):
 			random_number2 = random.randint(0,len(allName)-1)
