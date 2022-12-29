@@ -1,0 +1,26 @@
+Isra@gmail.com Bonjour Isra 👋
+	Voici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à Moussa
+
+Yaël@gmail.com Bonjour Yaël 👋
+	Voici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à Astrid
+
+Ephraïm@gmail.com Bonjour Ephraïm 👋
+	Voici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à Lenny
+
+Moussa@gmail.com Bonjour Moussa 👋
+	Voici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à Yaël
+
+Astrid@gmail.com Bonjour Astrid 👋
+	Voici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à Ephraïm
+
+Lenny@gmail.com Bonjour Lenny 👋
+	Voici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à Isra
+
+Rosalie@gmail.com Bonjour Rosalie 👋
+	Voici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à personne
+
+
+All name: ['Isra', 'Yaël', 'Ephraïm', 'Moussa', 'Astrid', 'Lenny', 'Rosalie']
+Participant: {0: 'Isra', 1: 'Yaël', 2: 'Ephraïm', 3: 'Moussa', 4: 'Astrid', 5: 'Lenny', 6: 'Rosalie'}
+Email Participant: {'Isra': 'Isra@gmail.com', 'Yaël': 'Yaël@gmail.com', 'Ephraïm': 'Ephraïm@gmail.com', 'Moussa': 'Moussa@gmail.com', 'Astrid': 'Astrid@gmail.com', 'Lenny': 'Lenny@gmail.com', 'Rosalie': 'Rosalie@gmail.com'}
+Contrainte: {'Isra': [], 'Yaël': ['Lenny', 'Rosalie'], 'Ephraïm': ['Rosalie', 'Yaël'], 'Moussa': ['Rosalie'], 'Astrid': [], 'Lenny': ['Lenny', 'Yaël'], 'Rosalie': []}
