@@ -3,6 +3,70 @@ import re
 import os 
 from name import prenom
 
+
+## relier les personnes entre elles pour connaitre son SantaClaus
+def ChooseSantaClaus(selfDictPerson:dict,selfAllName:list,selfContrainteDict:dict, selfnbrtry:int, choix:bool):
+	global dictPerson
+	global allName
+	global contrainteDict
+	kdo = {}
+	global_availableName = list(selfDictPerson.keys())
+	for i in selfAllName:
+		selfAvailableName = global_availableName.copy()
+		for x in selfAvailableName:
+			if selfDictPerson[x] == i:
+				selfAvailableName.remove(x)
+		for y in selfContrainteDict[i]:
+			value = list(selfDictPerson.values())
+			indexPersonContraint = ''
+			try:
+				indexPersonContraint = value.index(y)
+				selfAvailableName.remove(indexPersonContraint)
+			except Exception as e:
+				print(e)
+		if len(selfAvailableName) != 0:
+			toName = random.choice(selfAvailableName)
+			global_availableName.remove(toName)
+			kdo.update({i:selfDictPerson[toName]})
+		elif len(selfAvailableName) == 0 and selfnbrtry < 10:
+			selfnbrtry = selfnbrtry + 1
+			ChooseSantaClaus(dictPerson, allName, contrainteDict,selfnbrtry)
+			break
+		elif selfnbrtry >= 10:
+			if choix == True:
+				os.system('cls')
+				print(f"Vos choix ne sont pas possible, veuillez changer la contrainte de {i} :")
+				print(allName)
+				nameContrainte = input(f"Enter a list (separate with ',') that {i} won't be abble to send: ").replace(' ','').split(",")
+				for y in nameContrainte:
+					if y == "":
+						indexList = nameContrainte.index(y)
+						nameContrainte[indexList] = 'aucune'
+					else:
+						if y not in allName:
+							nameContrainte = input(f"{y} is not in {allName}, please Enter again: ").replace(' ','').split(",")
+				while i in nameContrainte or len(nameContrainte) == len(allName)-1 :
+					nameContrainte = input(f"Enter a list (separate with ',') that {i} won't be abble to send: ").replace(' ','').split(",")
+				contrainteDict.update({i:nameContrainte})
+				ChooseSantaClaus(dictPerson, allName, contrainteDict,0, choix=True)
+			elif choix == False:
+				for o in range(len(allName)):
+					rangefor = random.randint(0,len(allName)%2)
+					for k in range(rangefor):
+						random_number2 = random.randint(0,len(allName)-1)
+						while random_number2 == random_number:
+							random_number2 = random.randint(0,len(allName)-1)
+						icontrainte.append(allName[random_number2])
+					contrainteDict.update({allName[k]:icontrainte})
+				ChooseSantaClaus(dictPerson, allName, contrainteDict, 0, choix=False)
+	if len(kdo) != len(allName):
+		for i in allName:
+			if i not in kdo:
+				kdo.update({i:'personne'})
+	return kdo
+
+
+
 choix = int(input("Vous préférez :\n\t1 - Version anonymes\n\t2 - Versions avec vos propres nom, e-mail, contraintes ...etc\n"))
 if choix == 1:
 	nbr_personne = int(input("Combien de personnes participent ?\n"))
@@ -10,19 +74,22 @@ if choix == 1:
 	dictEmail = {}
 	allName = []
 	contrainteDict = {}
+	icontrainte = []
 	for i in range(nbr_personne):
 		random_number = random.randint(1,len(prenom))
 		dictPerson.update({i:prenom[random_number]})
 		dictEmail.update({prenom[random_number]:f"{prenom[random_number]}@gmail.com"})
 		allName.append(prenom[random_number])
-		icontrainte = []
-		rangefor = random.randint(0,nbr_personne-1)
+	for j in range(nbr_personne):
+		rangefor = random.randint(0,len(allName)%2)
 		for x in range(rangefor):
-			random_number2 = random.randint(1,len(prenom))
+			random_number2 = random.randint(0,len(allName)-1)
 			while random_number2 == random_number:
-				random_number2 = random.randint(1,len(prenom))
-			icontrainte.append(prenom[random_number2])
-		contrainteDict.update({prenom[random_number]:icontrainte})
+				random_number2 = random.randint(0,len(allName)-1)
+			icontrainte.append(allName[random_number2])
+		contrainteDict.update({allName[j]:icontrainte})
+
+	kdo = ChooseSantaClaus(dictPerson, allName, contrainteDict,0, choix=False)
 else:
 	#nombre x de personne
 	try:
@@ -71,58 +138,8 @@ else:
 			nameContrainte = input(f"Enter a list (separate with ',') that {dictPerson[i]} won't be abble to send: ").replace(' ','').split(",")
 		contrainteDict.update({dictPerson[i]:nameContrainte})
 
+	kdo = ChooseSantaClaus(dictPerson, allName, contrainteDict,0, choix=True)
 
-## relier les personnes entre elles pour connaitre son SantaClaus
-def ChooseSantaClaus(selfDictPerson:dict,selfAllName:list,selfContrainteDict:dict, selfnbrtry:int):
-	global dictPerson
-	global allName
-	global contrainteDict
-	kdo = {}
-	global_availableName = list(selfDictPerson.keys())
-	for i in selfAllName:
-		selfAvailableName = global_availableName.copy()
-		for x in selfAvailableName:
-			if selfDictPerson[x] == i:
-				selfAvailableName.remove(x)
-		for y in selfContrainteDict[i]:
-			value = list(selfDictPerson.values())
-			indexPersonContraint = ''
-			try:
-				indexPersonContraint = value.index(y)
-				selfAvailableName.remove(indexPersonContraint)
-			except Exception as e:
-				print(e)
-		if len(selfAvailableName) != 0:
-			toName = random.choice(selfAvailableName)
-			global_availableName.remove(toName)
-			kdo.update({i:selfDictPerson[toName]})
-		elif len(selfAvailableName) == 0 and selfnbrtry < 10:
-			selfnbrtry = selfnbrtry + 1
-			ChooseSantaClaus(dictPerson, allName, contrainteDict,selfnbrtry)
-			break
-		elif selfnbrtry >= 10:
-			os.system('cls')
-			print(f"Vos choix ne sont pas possible, veuillez changer la contrainte de {i} :")
-			nameContrainte = input(f"Enter a list (separate with ',') that {i} won't be abble to send: ").replace(' ','').split(",")
-			for y in nameContrainte:
-				if y == "":
-					indexList = nameContrainte.index(y)
-					nameContrainte[indexList] = 'aucune'
-				else:
-					if y not in allName:
-						nameContrainte = input(f"{y} is not in {allName}, please Enter again: ").replace(' ','').split(",")
-			while i in nameContrainte or len(nameContrainte) == len(allName)-1 :
-				nameContrainte = input(f"Enter a list (separate with ',') that {i} won't be abble to send: ").replace(' ','').split(",")
-			contrainteDict.update({i:nameContrainte})
-			ChooseSantaClaus(dictPerson, allName, contrainteDict,0)
-	if len(kdo) != len(allName):
-		for i in allName:
-			if i not in kdo:
-				kdo.update({i:'personne'})
-	return kdo
-
-
-kdo = ChooseSantaClaus(dictPerson, allName, contrainteDict,0)
 for i in allName:
 	templateMail = f"Bonjour {i} 👋\n\tVoici le jeux SantaClaus, une personne de votre entourage à été tiré au hasard, vous allé devoir acheter un cadeau à {kdo[i]}"
 	print(dictEmail[i],templateMail)
